@@ -1,3 +1,5 @@
+package nl.sogyo.jmsproject;
+
 // Cassandra Java Driver
 import com.datastax.driver.core.*;
 
@@ -8,8 +10,8 @@ public class CasListener {
 	public static void main (String[] args) {
 		try {
 			// Connect to ActiveMQ
-			JMSConnection jmsConnection = new JMSConnection();
-			MessageConsumer consumer = jmsConnection.getConsumer();
+			JMSTopic jmsTopic = new JMSTopic("localhost",61616,"admin","password","event");
+			MessageConsumer consumer = jmsTopic.getConsumer();
 			
 			// Connect to the Cassandra cluster and keyspace "dev"
 			Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
@@ -30,7 +32,7 @@ public class CasListener {
 			// Close the connections
 			casSession.close();
 			cluster.close();
-			jmsConnection.close();
+			jmsTopic.close();
         } catch (Exception e) {
 			// Just printStackTrace for all Exceptions for simplicity
             e.printStackTrace();

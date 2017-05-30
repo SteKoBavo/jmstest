@@ -1,3 +1,5 @@
+package nl.sogyo.jmsproject;
+
 // JDBC
 import java.sql.*;
 
@@ -8,8 +10,8 @@ public class PgPublisher {
 	public static void main (String[] args) {
 		try {
 			// Connect to ActiveMQ
-			JMSConnection jmsConnection = new JMSConnection();
-			MessageProducer producer = jmsConnection.getProducer();
+			JMSTopic jmsTopic = new JMSTopic("localhost",61616,"admin","password","event");
+			MessageProducer producer = jmsTopic.getProducer();
 			
 			// Connect to PostGreSQL
 			Class.forName("org.postgresql.Driver");
@@ -37,7 +39,7 @@ public class PgPublisher {
 					
 					// Publish all rows
 					while (rs.next()) {
-						TextMessage msg = jmsConnection.getSession().createTextMessage(rs.getString(1).trim() + ";" + rs.getString(2).trim());
+						TextMessage msg = jmsTopic.createTextMessage(rs.getString(1).trim() + ";" + rs.getString(2).trim());
 						producer.send(msg);
 					}
 					
@@ -53,7 +55,7 @@ public class PgPublisher {
 			
 			// Close the connections
 			pgConnection.close();
-			jmsConnection.close();
+			jmsTopic.close();
         } catch (Exception e) {
 			// Just printStackTrace for all Exceptions for simplicity
             e.printStackTrace();

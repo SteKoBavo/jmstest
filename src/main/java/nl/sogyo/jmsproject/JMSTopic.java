@@ -1,26 +1,21 @@
-// JMS
+package nl.sogyo.jmsproject;
+
+import javax.jms.*;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQTopic;
-import javax.jms.*;
 
-public class JMSConnection {
-	// Parameters
-	private String user = "admin";
-	private String password = "password";
-	private String host = "localhost";
-	private int port = 61616;
-	private String destination = "event";
-	
+// Represents a specific Topic (Destination) for a specific Session on a specific Connection.
+public class JMSTopic {
 	private Connection connection;
 	private Session session;
 	private Destination dest;
 	
-	public JMSConnection() throws JMSException {
-		ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("tcp://" + this.host + ":" + this.port);
-		this.connection = factory.createConnection(this.user, this.password);
+	public JMSTopic(String host, int port, String user, String password, String destination) throws JMSException {
+		ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("tcp://" + host + ":" + port);
+		this.connection = factory.createConnection(user, password);
 		this.connection.start();
 		this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		this.dest = new ActiveMQTopic(this.destination);
+		this.dest = new ActiveMQTopic(destination);
 	}
 	
 	public MessageConsumer getConsumer() throws JMSException {
@@ -33,8 +28,8 @@ public class JMSConnection {
 		return producer;
 	}
 
-	public Session getSession() {
-		return this.session;
+	public TextMessage createTextMessage(String str) throws JMSException {
+		return this.session.createTextMessage(str);
 	}
 	
 	public void close() throws JMSException {
