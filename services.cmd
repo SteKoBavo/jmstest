@@ -1,0 +1,2 @@
+START cassandra
+activemq start

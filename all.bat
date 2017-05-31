@@ -1,0 +1,2 @@
+START cqlsh
+java -cp C:/apache-activemq-5.14.5/activemq-all-5.14.5.jar;../mapje/cassandra-java-driver-3.1.0/*;../mapje/cassandra-java-driver-3.1.0/lib/*;../mapje/postgresql.jar;target/classes nl.sogyo.jmsproject.StartSystem
