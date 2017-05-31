@@ -3,27 +3,39 @@ package nl.sogyo.jmsproject;
 import com.datastax.driver.core.*;
 import javax.jms.*;
 
-public class CasListener {
+public class CasListener implements Runnable {
 	private JMSTopic jmsTopic;
 	private MessageConsumer consumer;
 	private Cluster cluster;
 	private com.datastax.driver.core.Session casSession;
 	
-	public CasListener() throws JMSException {
-		// Connect to ActiveMQ Topic
-		this.jmsTopic = new JMSTopic("localhost",61616,"admin","password","event");
-		this.consumer = jmsTopic.getConsumer();
-		
-		// Connect to the Cassandra cluster and keyspace "dev"
-		this.cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-		this.casSession = cluster.connect("dev");
+	public CasListener() {
+		try {
+			// Connect to ActiveMQ Topic
+			this.jmsTopic = new JMSTopic("localhost",61616,"admin","password","event");
+			this.consumer = jmsTopic.getConsumer();
+			
+			// Connect to the Cassandra cluster and keyspace "dev"
+			this.cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
+			this.casSession = cluster.connect("dev");
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void listen() throws JMSException {
-		while(true) {
-			Message msg = this.consumer.receive();
-			this.onMessage(msg);
-		}		
+	public void run() {
+		try {
+			while(true) {
+				Message msg = this.consumer.receive();
+				this.onMessage(msg);
+				if (false) {
+					break;
+				}
+			}
+			this.close();
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void onMessage(Message msg) throws JMSException {
@@ -37,16 +49,5 @@ public class CasListener {
 		this.casSession.close();
 		this.cluster.close();
 		this.jmsTopic.close();
-	}
-	
-	public static void main (String[] args) {
-		try {
-			CasListener casListener = new CasListener();
-			casListener.listen();
-			casListener.close();
-        } catch (Exception e) {
-			// Just printStackTrace for all Exceptions for simplicity
-            e.printStackTrace();
-        }
 	}
 }
