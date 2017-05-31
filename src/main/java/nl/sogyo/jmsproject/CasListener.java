@@ -28,13 +28,11 @@ public class CasListener implements Runnable {
 			while(true) {
 				Message msg = this.consumer.receive();
 				this.onMessage(msg);
-				if (false) {
-					break;
-				}
 			}
-			this.close();
 		} catch (JMSException e) {
 			e.printStackTrace();
+		} finally {
+			this.close();
 		}
 	}
 
@@ -45,9 +43,13 @@ public class CasListener implements Runnable {
 		this.casSession.execute(query);
 	}
 	
-	public void close() throws JMSException {
-		this.casSession.close();
-		this.cluster.close();
-		this.jmsTopic.close();
+	public void close() {
+		try {
+			this.casSession.close();
+			this.cluster.close();
+			this.jmsTopic.close();
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
 	}
 }
