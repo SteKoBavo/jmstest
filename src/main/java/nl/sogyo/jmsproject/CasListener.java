@@ -29,7 +29,7 @@ public class CasListener {
 	public void onMessage(Message msg) throws JMSException {
 		String body = ((TextMessage) msg).getText();
 		String[] row = body.split(";");
-		String query = "INSERT INTO people (firstname, lastname) VALUES ('" + row[0] + "', '" + row[1] + "')";
+		String query = "INSERT INTO trafficlights (direction, color) VALUES ('" + row[0] + "', '" + row[1] + "')";
 		this.casSession.execute(query);
 	}
 	

@@ -38,7 +38,7 @@ public class PgPublisher {
 				
 				// Query the TABLE testschema.test
 				Statement st = this.pgConnection.createStatement();
-				ResultSet rs = st.executeQuery("SELECT * FROM testschema.test");
+				ResultSet rs = st.executeQuery("SELECT * FROM testschema.trafficlights");
 				
 				// Publish all rows
 				while (rs.next()) {
@@ -53,7 +53,7 @@ public class PgPublisher {
 				break;
 			}
 	
-			Thread.sleep(500);
+			Thread.sleep(100);
 		}
 	}
 	
