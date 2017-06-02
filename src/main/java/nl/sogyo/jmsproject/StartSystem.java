@@ -8,6 +8,9 @@ public class StartSystem {
 		Thread pgThread = new Thread(new PgPublisher());
 		pgThread.start();
 		
+		Thread dataStreamThread = new Thread(new DataStreamer());
+		dataStreamThread.start();
+		
 		PgUpdater pgUpdater = new PgUpdater();
 		pgUpdater.run();
 	}

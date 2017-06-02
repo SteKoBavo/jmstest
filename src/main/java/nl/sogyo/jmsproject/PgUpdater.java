@@ -50,7 +50,7 @@ public class PgUpdater implements Runnable {
 	private void setRandomTrafficLight() throws SQLException {
 		Statement st = this.pgConnection.createStatement();
 		st.execute("UPDATE testschema.trafficlights SET color = 'Red';");
-		int  randomNumber = this.rand.nextInt(4);
+		int randomNumber = this.rand.nextInt(4);
 		switch (randomNumber) {
 			case 0:	st.execute("UPDATE testschema.trafficlights SET color = 'Green' WHERE direction = 'North';");
 					break;
