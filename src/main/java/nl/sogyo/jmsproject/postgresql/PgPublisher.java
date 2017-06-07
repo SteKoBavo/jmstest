@@ -2,7 +2,6 @@ package nl.sogyo.jmsproject.postgresql;
 
 import nl.sogyo.jmsproject.JMSTopic;
 import java.sql.*;
-import javax.jms.*;
 
 public class PgPublisher implements Runnable {
 	JMSTopic jmsTopic;
