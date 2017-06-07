@@ -1,4 +1,4 @@
-package nl.sogyo.jmsproject;
+package nl.sogyo.jmsproject.postgresql;
 
 import java.util.Random;
 import java.sql.*;
@@ -21,13 +21,13 @@ public class PgUpdater implements Runnable {
 	private void initializeTable() throws SQLException {
 		Statement st = this.pgConnection.createStatement();
 		try {
-		st.execute("CREATE TABLE IF NOT EXISTS testschema.trafficlights (direction CHAR(5) PRIMARY KEY, color CHAR(5) NOT NULL);");
-		st.execute("INSERT INTO testschema.trafficlights VALUES( 'North', 'Red');");
-		st.execute("INSERT INTO testschema.trafficlights VALUES( 'East', 'Red');");
-		st.execute("INSERT INTO testschema.trafficlights VALUES( 'South', 'Green');");
-		st.execute("INSERT INTO testschema.trafficlights VALUES( 'West', 'Red');");
-		st.execute("CREATE OR REPLACE FUNCTION notifyfunc() RETURNS trigger AS $$ BEGIN NOTIFY mychannel; RETURN NEW; END; $$ LANGUAGE 'plpgsql';");
-		st.execute("CREATE TRIGGER notifier BEFORE INSERT OR UPDATE ON testschema.trafficlights FOR EACH STATEMENT EXECUTE PROCEDURE notifyfunc();");
+			st.execute("CREATE TABLE IF NOT EXISTS testschema.trafficlights (direction CHAR(5) PRIMARY KEY, color CHAR(5) NOT NULL);");
+			st.execute("INSERT INTO testschema.trafficlights VALUES( 'North', 'Red');");
+			st.execute("INSERT INTO testschema.trafficlights VALUES( 'East', 'Red');");
+			st.execute("INSERT INTO testschema.trafficlights VALUES( 'South', 'Green');");
+			st.execute("INSERT INTO testschema.trafficlights VALUES( 'West', 'Red');");
+			st.execute("CREATE OR REPLACE FUNCTION notifyfunc() RETURNS trigger AS $$ BEGIN NOTIFY mychannel; RETURN NEW; END; $$ LANGUAGE 'plpgsql';");
+			st.execute("CREATE TRIGGER notifier BEFORE INSERT OR UPDATE ON testschema.trafficlights FOR EACH STATEMENT EXECUTE PROCEDURE notifyfunc();");
 		} catch (Exception e) {
 			//Do Nothing. An Exception is thrown when the table and the rows are already created.
 		}

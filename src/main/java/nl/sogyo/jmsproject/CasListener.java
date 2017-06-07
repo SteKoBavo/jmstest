@@ -13,11 +13,11 @@ public class CasListener implements Runnable {
 		try {
 			// Connect to ActiveMQ Topic
 			this.jmsTopic = new JMSTopic("localhost",61616,"admin","password","event");
-			this.consumer = jmsTopic.getConsumer();
+			this.consumer = this.jmsTopic.getConsumer();
 			
 			// Connect to the Cassandra cluster and keyspace "dev"
 			this.cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			this.casSession = cluster.connect("dev");
+			this.casSession = this.cluster.connect("dev");
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
@@ -37,10 +37,14 @@ public class CasListener implements Runnable {
 	}
 
 	public void onMessage(Message msg) throws JMSException {
-		String body = ((TextMessage) msg).getText();
-		String[] row = body.split(";");
-		String query = "INSERT INTO trafficlights (direction, color) VALUES ('" + row[0] + "', '" + row[1] + "')";
+		String msgBody = ((TextMessage) msg).getText();
+		String query = this.messageToQuery(msgBody);
 		this.casSession.execute(query);
+	}
+	
+	public String messageToQuery(String msg) {
+		String[] row = msg.split(";");
+		return "INSERT INTO trafficlights (direction, color) VALUES ('" + row[0] + "', '" + row[1] + "')";
 	}
 	
 	public void close() {

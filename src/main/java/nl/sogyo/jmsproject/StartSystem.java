@@ -1,5 +1,7 @@
 package nl.sogyo.jmsproject;
 
+import nl.sogyo.jmsproject.postgresql.*;
+
 public class StartSystem {	
 	public static void main (String[] args) {
 		Thread casThread = new Thread(new CasListener());

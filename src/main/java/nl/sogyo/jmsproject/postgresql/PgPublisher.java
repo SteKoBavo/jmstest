@@ -1,5 +1,6 @@
-package nl.sogyo.jmsproject;
+package nl.sogyo.jmsproject.postgresql;
 
+import nl.sogyo.jmsproject.JMSTopic;
 import java.sql.*;
 import javax.jms.*;
 
@@ -43,26 +44,30 @@ public class PgPublisher implements Runnable {
 	}
 	
 	private void contactDB() throws Exception {
-		Statement stmt = this.pgConnection.createStatement();
-		ResultSet rst = stmt.executeQuery("SELECT 1");	//Issue a dummy query to contact the backend and receive any pending notifications.
-		rst.close();
-		stmt.close();
-		
+		this.dummyQuery();
 		org.postgresql.PGNotification notifications[] = this.listenConnection.getNotifications();
 		if (notifications != null) {			
 			System.out.println("Got notification!");	//Note that we cannot (yet) delete records from the Cassandra DB this way, only add new records. Also, Cassandra automatically overwrites a record when a row is inserted with the same primary key.
-			this.publishTable();
+			this.onNotification();
 		}
 	}
 	
-	private void publishTable() throws Exception {
+	private void dummyQuery() throws SQLException {
+		Statement stmt = this.pgConnection.createStatement();
+		ResultSet rst = stmt.executeQuery("SELECT 1");	//Issue a dummy query to contact the backend and receive any pending notifications.
+		rst.close();
+		stmt.close();		
+	}
+	
+	private void onNotification() throws Exception {
 			// Query the TABLE testschema.test
 			Statement st = this.pgConnection.createStatement();
 			ResultSet rs = st.executeQuery("SELECT * FROM testschema.trafficlights");
 			
 			// Publish all rows
 			while (rs.next()) {
-				TextMessage msg = this.jmsTopic.createTextMessage(rs.getString(1).trim() + ";" + rs.getString(2).trim());
+				String message = rs.getString(1).trim() + ";" + rs.getString(2).trim();
+				TextMessage msg = this.jmsTopic.createTextMessage(message);
 				this.producer.send(msg);
 			}
 			
