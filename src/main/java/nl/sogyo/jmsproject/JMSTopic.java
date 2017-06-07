@@ -9,6 +9,7 @@ public class JMSTopic {
 	private Connection connection;
 	private Session session;
 	private Destination dest;
+	private MessageProducer producer;
 	
 	public JMSTopic(String host, int port, String user, String password, String destination) throws JMSException {
 		ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("tcp://" + host + ":" + port);
@@ -16,20 +17,17 @@ public class JMSTopic {
 		this.connection.start();
 		this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		this.dest = new ActiveMQTopic(destination);
+		this.producer = this.session.createProducer(this.dest);
+		this.producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 	}
 	
 	public MessageConsumer getConsumer() throws JMSException {
 		return this.session.createConsumer(this.dest);
 	}
 	
-	public MessageProducer getProducer() throws JMSException {
-		MessageProducer producer = this.session.createProducer(this.dest);
-		producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-		return producer;
-	}
-
-	public TextMessage createTextMessage(String str) throws JMSException {
-		return this.session.createTextMessage(str);
+	public void publish(String str) throws JMSException {
+		TextMessage msg = this.session.createTextMessage(str);
+		this.producer.send(msg);
 	}
 	
 	public void close() throws JMSException {

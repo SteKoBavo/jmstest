@@ -6,7 +6,6 @@ import javax.jms.*;
 
 public class PgPublisher implements Runnable {
 	JMSTopic jmsTopic;
-	MessageProducer producer;
 	java.sql.Connection pgConnection;
 	org.postgresql.PGConnection listenConnection;
 	
@@ -14,7 +13,6 @@ public class PgPublisher implements Runnable {
 		try {
 			// Connect to ActiveMQ
 			this.jmsTopic = new JMSTopic("localhost",61616,"admin","password","event");
-			this.producer = this.jmsTopic.getProducer();
 			
 			// Connect to PostGreSQL
 			Class.forName("org.postgresql.Driver");
@@ -67,8 +65,7 @@ public class PgPublisher implements Runnable {
 			// Publish all rows
 			while (rs.next()) {
 				String message = rs.getString(1).trim() + ";" + rs.getString(2).trim();
-				TextMessage msg = this.jmsTopic.createTextMessage(message);
-				this.producer.send(msg);
+				this.jmsTopic.publish(message);
 			}
 			
 			rs.close();
