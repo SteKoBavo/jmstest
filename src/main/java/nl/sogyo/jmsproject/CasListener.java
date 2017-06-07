@@ -1,20 +1,13 @@
 package nl.sogyo.jmsproject;
 
-import com.datastax.driver.core.*;
-
 public class CasListener implements Runnable {
 	private JMSTopic jmsTopic;
-	private Cluster cluster;
-	private com.datastax.driver.core.Session casSession;
+	private CassandraConnection cassandra;
 	
 	public CasListener() {
 		try {
-			// Connect to ActiveMQ Topic
 			this.jmsTopic = new JMSTopic("localhost",61616,"admin","password","event");
-			
-			// Connect to the Cassandra cluster and keyspace "dev"
-			this.cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			this.casSession = this.cluster.connect("dev");
+			this.cassandra = new CassandraConnection("127.0.0.1","dev");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -35,7 +28,7 @@ public class CasListener implements Runnable {
 
 	public void onMessage(String msg) {
 		String query = this.messageToQuery(msg);
-		this.casSession.execute(query);
+		this.cassandra.execute(query);
 	}
 	
 	public String messageToQuery(String msg) {
@@ -45,8 +38,7 @@ public class CasListener implements Runnable {
 	
 	public void close() {
 		try {
-			this.casSession.close();
-			this.cluster.close();
+			this.cassandra.close();
 			this.jmsTopic.close();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -18,8 +18,6 @@ public class JMSTopic {
 		this.connection.start();
 		this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		this.dest = new ActiveMQTopic(destination);
-		
-		//Setup producer and consumer
 		this.producer = this.session.createProducer(this.dest);
 		this.producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 		this.consumer = this.session.createConsumer(this.dest);
