@@ -29,11 +29,11 @@ public class CassandraListener implements Runnable {
 	}
 
 	public void onMessage(String msg) {
-		String query = this.messageToQuery(msg);
-		this.cassandra.execute(query);
+		String sql = this.messageToSQL(msg);
+		this.cassandra.execute(sql);
 	}
 	
-	public String messageToQuery(String msg) {
+	public String messageToSQL(String msg) {
 		String[] row = msg.split(";");
 		return "INSERT INTO trafficlights (direction, color) VALUES ('" + row[0] + "', '" + row[1] + "')";
 	}

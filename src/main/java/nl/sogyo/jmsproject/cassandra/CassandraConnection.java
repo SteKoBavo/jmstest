@@ -11,8 +11,8 @@ public class CassandraConnection {
 		this.session = this.cluster.connect(keyspace);
 	}
 	
-	public void execute(String query) {
-		this.session.execute(query);
+	public void execute(String sql) {
+		this.session.execute(sql);
 	}
 	
 	public void close() {
