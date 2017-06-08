@@ -1,4 +1,4 @@
-package nl.sogyo.jmsproject;
+package nl.sogyo.jmsproject.cassandra;
 
 import com.datastax.driver.core.*;
 

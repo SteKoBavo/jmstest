@@ -1,10 +1,12 @@
-package nl.sogyo.jmsproject;
+package nl.sogyo.jmsproject.cassandra;
 
-public class CasListener implements Runnable {
+import nl.sogyo.jmsproject.JMSTopic;
+
+public class CassandraListener implements Runnable {
 	private JMSTopic jmsTopic;
 	private CassandraConnection cassandra;
 	
-	public CasListener() {
+	public CassandraListener() {
 		try {
 			this.jmsTopic = new JMSTopic("localhost",61616,"admin","password","event");
 			this.cassandra = new CassandraConnection("127.0.0.1","dev");
