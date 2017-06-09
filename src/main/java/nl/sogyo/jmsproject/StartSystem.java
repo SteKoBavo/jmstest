@@ -9,7 +9,7 @@ public class StartSystem {
 			
 			
 			// Start CassandraListener
-			JMSTopic jmsTopic = new JMSTopic("localhost",61616,"admin","password","event");
+			JMSTopic jmsTopic = new AMQTopic("localhost",61616,"admin","password","event");
 			CassandraConnection cassandra = new CassandraConnection("127.0.0.1","dev");
 			Thread cassandraThread = new Thread(new CassandraListener(jmsTopic,cassandra));
 			cassandraThread.start();
@@ -21,7 +21,7 @@ public class StartSystem {
 			
 			
 			// Start PgPublisher
-			JMSTopic jmsTopic2 = new JMSTopic("localhost",61616,"admin","password","event");
+			JMSTopic jmsTopic2 = new AMQTopic("localhost",61616,"admin","password","event");
 			Thread pgThread = new Thread(new PgPublisher(jmsTopic2));
 			pgThread.start();
 			
