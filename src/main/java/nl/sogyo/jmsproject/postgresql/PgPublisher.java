@@ -8,10 +8,9 @@ public class PgPublisher implements Runnable {
 	java.sql.Connection pgConnection;
 	org.postgresql.PGConnection listenConnection;
 	
-	public PgPublisher() {
+	public PgPublisher(JMSTopic jmsTopic) {
 		try {
-			// Connect to ActiveMQ
-			this.jmsTopic = new JMSTopic("localhost",61616,"admin","password","event");
+			this.jmsTopic = jmsTopic;
 			
 			// Connect to PostGreSQL
 			Class.forName("org.postgresql.Driver");
