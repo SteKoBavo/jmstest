@@ -1,12 +1,18 @@
-package nl.sogyo.mancala;
+package nl.sogyo.jmsproject;
 
 import org.junit.Assert;
 import org.junit.Test;
+import nl.sogyo.jmsproject.cassandra.*;
 
 public class JMSProjectTest {
 
     @Test
-    public void test1() {
-        Assert.assertTrue(0==0);
+    public void onMessageResultsInASQLStatementOnCassandra() {
+		CassandraMock cMock = new CassandraMock();
+		CassandraListener cas = new CassandraListener(new JMSTopicMock(), cMock);
+		cas.onMessage("a;b");
+		String lastSQL = cMock.getLastSQL();
+		String expectedResult = "INSERT INTO trafficlights (direction, color) VALUES ('a', 'b')";
+        Assert.assertEquals(lastSQL, expectedResult);
     }
 }

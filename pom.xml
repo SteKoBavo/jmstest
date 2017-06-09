@@ -33,7 +33,7 @@
 	
 	
 	
-	
+	<!--
 	
 	<reporting>
 		<plugins>
@@ -83,5 +83,6 @@
 			</plugin>
 		</plugins>
     </build>
+	-->
 	
 </project>

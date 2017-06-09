@@ -4,7 +4,6 @@ import javax.jms.*;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQTopic;
 
-// Represents a specific Topic (Destination) for a specific Session on a specific Connection.
 public class AMQTopic implements JMSTopic {
 	private Connection connection;
 	private Session session;
