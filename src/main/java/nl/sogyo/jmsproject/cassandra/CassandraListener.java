@@ -6,13 +6,9 @@ public class CassandraListener implements Runnable {
 	private JMSTopic jmsTopic;
 	private CassandraConnection cassandra;
 	
-	public CassandraListener() {
-		try {
-			this.jmsTopic = new JMSTopic("localhost",61616,"admin","password","event");
-			this.cassandra = new CassandraConnection("127.0.0.1","dev");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public CassandraListener(JMSTopic jmsTopic, CassandraConnection cassandra) {
+		this.jmsTopic = jmsTopic;
+		this.cassandra = cassandra;
 	}
 	
 	public void run() {
