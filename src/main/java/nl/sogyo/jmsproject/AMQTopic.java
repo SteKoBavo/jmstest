@@ -7,21 +7,22 @@ import org.apache.activemq.command.ActiveMQTopic;
 public class AMQTopic implements JMSTopic {
 	private TopicConnection connection;
 	private TopicSession session;
-	private Topic dest;
+	private Topic topic;
 	private MessageProducer producer;
 	private MessageConsumer consumer;
 	private TopicSubscriber subscriber;
 	
-	public AMQTopic(String host, int port, String user, String password, String destination) throws JMSException {
+	public AMQTopic(String host, int port, String user, String password, String topicName) throws JMSException {
 		ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("tcp://" + host + ":" + port);
 		this.connection = factory.createTopicConnection(user, password);
 		this.connection.start();
 		this.session = this.connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-		this.dest = new ActiveMQTopic(destination);
-		this.producer = this.session.createProducer(this.dest);
+		this.topic = new ActiveMQTopic(topicName);
+
+		this.producer = this.session.createProducer(this.topic);
 		this.producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-		this.consumer = this.session.createConsumer(this.dest);
-		this.subscriber = this.session.createSubscriber(this.dest);
+		this.consumer = this.session.createConsumer(this.topic);
+		this.subscriber = this.session.createSubscriber(this.topic);
 	}
 	
 	public void publish(String str) throws JMSException {
