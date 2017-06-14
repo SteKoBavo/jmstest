@@ -22,8 +22,7 @@ public class StartSystem {
 			
 			
 			// Start PgPublisher
-			JMSTopic jmsTopic2 = new AMQTopic("localhost",61616,"admin","password","event");
-			Thread pgThread = new Thread(new PgPublisher(jmsTopic2));
+			Thread pgThread = new Thread(new PgPublisher(jmsTopic));
 			pgThread.start();
 			
 			
