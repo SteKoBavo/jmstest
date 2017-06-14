@@ -11,8 +11,9 @@ public class StartSystem {
 			// Start CassandraListener
 			JMSTopic jmsTopic = new AMQTopic("localhost",61616,"admin","password","event");
 			CassandraConnection cassandra = new Cassandra("127.0.0.1","dev");
-			Thread cassandraThread = new Thread(new CassandraListener(jmsTopic,cassandra));
-			cassandraThread.start();
+			//jmsTopic.subscribe(new CassandraListener(jmsTopic,cassandra));
+			//Thread cassandraThread = new Thread(new CassandraListener(jmsTopic,cassandra));
+			//cassandraThread.start();
 			
 			
 			// Start DataStreamer

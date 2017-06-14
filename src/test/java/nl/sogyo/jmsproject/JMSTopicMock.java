@@ -1,6 +1,8 @@
 package nl.sogyo.jmsproject;
 
-public class JMSTopicMock implements JMSTopic {		
+import javax.jms.MessageListener;
+
+public class JMSTopicMock implements JMSTopic {
 	public void publish(String str) {
 	}
 	
@@ -11,6 +13,9 @@ public class JMSTopicMock implements JMSTopic {
 			e.printStackTrace();
 		}
 		return "North;Red";
+	}
+
+	public void subscribe(MessageListener messageListener) {
 	}
 	
 	public void close() {
