@@ -26,6 +26,11 @@ public class StartSystem {
 			pgThread.start();
 			
 			
+			// Start SparkTester
+			Thread sparkTester = new Thread(new SparkTester());
+			sparkTester.start();
+			
+			
 			// Start PgUpdater
 			PgUpdater pgUpdater = new PgUpdater();
 			pgUpdater.run();

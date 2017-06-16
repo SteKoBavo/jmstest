@@ -6,6 +6,11 @@
     <artifactId>jmsproject</artifactId>
     <version>1.0-SNAPSHOT</version>
 	
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+	
     <dependencies>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -27,6 +32,16 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-core_2.10</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-streaming_2.10</artifactId>
+			<version>2.1.1</version>
+		</dependency>
     </dependencies>
 	
 	
