@@ -3,12 +3,15 @@ package nl.sogyo.jmsproject;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.storage.StorageLevel;
+import org.apache.spark.streaming.Durations;
+import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class SparkTester implements Runnable {
-	public void run() {
+	public void run2() {
 		SparkConf conf = new SparkConf()
 			.setAppName("SparkTest")
 			.setMaster("local[*]");
@@ -23,16 +26,18 @@ public class SparkTester implements Runnable {
 		}
 	}
 	
-	/*
-	public void run2() {
+
+	public void run() {
 		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("sparkTask");
 		JavaStreamingContext streamingContext = new JavaStreamingContext(conf, Durations.seconds(10));
-		streamingContext.receiverStream(<<< super(StorageLevel.MEMORY_ONLY()) extends Receiver<Status> >>>)
-			.foreachRDD(
-				rdd -> rdd.coalesce(10)
-					.foreach(message -> message.getText()));
+		streamingContext.receiverStream(new SparkReceiver(StorageLevel.MEMORY_ONLY()))
+			.foreachRDD(rdd -> rdd.coalesce(2).map(integer -> integer*integer));
 		streamingContext.start();
-		streamingContext.awaitTermination();
+		try {
+			streamingContext.awaitTermination();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	*/
+
 }
