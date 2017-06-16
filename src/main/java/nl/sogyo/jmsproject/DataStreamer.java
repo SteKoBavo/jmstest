@@ -29,9 +29,10 @@ public class DataStreamer implements Runnable {
 	private void streamRandomNumbers(PrintWriter writer) {
 		try {
 			while (true) {
-				int randomNumber = this.rand.nextInt(4);
-				writer.println(randomNumber + "\n");
-				Thread.sleep(100);
+				Integer randomNumber = this.rand.nextInt(4);
+				writer.print(randomNumber);
+				writer.flush();
+				Thread.sleep(2000);
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

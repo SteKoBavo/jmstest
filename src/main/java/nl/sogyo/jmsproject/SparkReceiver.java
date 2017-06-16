@@ -28,15 +28,13 @@ public class SparkReceiver extends Receiver<Integer> {
         public void run() {
             try {
                 Socket s = new Socket("127.0.0.1", 5083);
-
                 InputStreamReader streamreader = new InputStreamReader(s.getInputStream());
                 BufferedReader reader = new BufferedReader(streamreader);
 
-                store(13);
-
-                String test = reader.readLine();
-                System.out.println(test);
-
+                while (true) {
+                    store(reader.read()-48);
+                    if (false) break;
+                }
                 reader.close();
             } catch (IOException ex) {
                 ex.printStackTrace();

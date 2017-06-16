@@ -7,6 +7,9 @@ import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,10 +31,10 @@ public class SparkTester implements Runnable {
 	
 
 	public void run() {
+        Logger.getLogger("org").setLevel(Level.WARN);
 		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("sparkTask");
 		JavaStreamingContext streamingContext = new JavaStreamingContext(conf, Durations.seconds(10));
-		streamingContext.receiverStream(new SparkReceiver(StorageLevel.MEMORY_ONLY()))
-			.foreachRDD(rdd -> rdd.coalesce(2).map(integer -> integer*integer));
+		streamingContext.receiverStream(new SparkReceiver(StorageLevel.MEMORY_ONLY())).print();
 		streamingContext.start();
 		try {
 			streamingContext.awaitTermination();
